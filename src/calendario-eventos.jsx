@@ -157,15 +157,21 @@ export default function CalendarioEventos() {
           <div className="flex gap-2 items-center">
             <button
               onClick={() => changeMonth(-1)}
-              className="px-2.5 py-1 bg-slate-700 text-white rounded text-xs hover:bg-slate-600 transition"
+              className="p-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition"
+              title="Mes anterior"
             >
-              ← Anterior
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
             <button
               onClick={() => changeMonth(1)}
-              className="px-2.5 py-1 bg-slate-700 text-white rounded text-xs hover:bg-slate-600 transition"
+              className="p-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600 transition"
+              title="Mes siguiente"
             >
-              Siguiente →
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </button>
             <button
               onClick={() => {
@@ -173,10 +179,10 @@ export default function CalendarioEventos() {
                 setSelectedDay(today);
                 setShowModal(true);
               }}
-              className="ml-2 px-2.5 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700 transition flex items-center gap-1"
+              className="ml-2 w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-full shadow-lg hover:shadow-green-500/50 transition-all duration-300 flex items-center justify-center group"
+              title="Crear nuevo evento"
             >
-              <Plus className="w-3 h-3" />
-              Nuevo
+              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
             </button>
           </div>
         </div>
@@ -473,10 +479,10 @@ export default function CalendarioEventos() {
       {/* Modal Formulario */}
       {showModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-          <div className="bg-slate-800 rounded-xl shadow-2xl max-w-md w-full p-6">
+          <div className="bg-slate-800 rounded-xl shadow-2xl max-w-md w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-5">
               <h2 className="text-xl font-bold text-white">
-                Agregar Evento - Día {selectedDay}
+                Agregar Evento
               </h2>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-white transition">
                 <X className="w-5 h-5" />
@@ -484,6 +490,29 @@ export default function CalendarioEventos() {
             </div>
 
             <div className="space-y-4">
+              {/* Selector de fecha */}
+              <div>
+                <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">
+                  Fecha del Evento *
+                </label>
+                <div className="flex gap-3">
+                  <select
+                    value={selectedDay || ''}
+                    onChange={(e) => setSelectedDay(parseInt(e.target.value))}
+                    className="flex-1 px-3 py-2 bg-slate-700 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm"
+                  >
+                    <option value="">Selecciona un día</option>
+                    {Array.from({ length: getDaysInMonth(currentDate).daysInMonth }, (_, i) => i + 1).map(day => (
+                      <option key={day} value={day}>
+                        {day} de {meses[currentDate.getMonth()]}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="px-4 py-2 bg-slate-700 text-white rounded-lg text-sm font-semibold flex items-center">
+                    {currentDate.getFullYear()}
+                  </div>
+                </div>
+              </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide">
                   Banner (Imagen)
